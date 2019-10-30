@@ -15,15 +15,8 @@ let isUsingGPSA = false;
 let minVersion;
 let newVersion;
 
-function isGPSLib(libPackage, dependency) {
-    let isTarget = libPackage.indexOf(googleAndroid) > -1 || libPackage.indexOf(googleFirebase) > -1;
-    if (isTarget && libPackage === googleAndroid && dependency === playServicesAds) {
-        isUsingGPSA = true;
-        if (!isCompatLib) {
-            return false;
-        }
-    }
-    return isTarget;
+function isGPSLib(libPackage) {
+    return libPackage.indexOf(googleAndroid) > -1 || libPackage.indexOf(googleFirebase) > -1;
 }
 
 function getBiggerVersion(v1, v2, idx = 0) {
@@ -55,7 +48,7 @@ function prepareLibraries(lines) {
             const libPackage = libraryParams[0];
             const dependency = libraryParams[1];
             const version = libraryParams[2];
-            if (isGPSLib(libPackage, dependency)) {
+            if (isGPSLib(libPackage)) {
                 libraries.push({ library: params[0], libPackage, dependency, version, isGPS: true });
                 if (!minVersion) {
                     minVersion = { libPackage, dependency, version };
